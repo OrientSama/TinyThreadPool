@@ -3,7 +3,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.locks.LockSupport
 
-class MyReentrantLock (private val isFair: Boolean = false) {
+class MyReentranLock (private val isFair: Boolean = false) {
     private var state = AtomicInteger(0)
     private var owner: Thread? = null
 

@@ -1,9 +1,9 @@
-import org.example.MyReentrantLock
+import org.example.MyReentranLock
 
 fun main() {
     val count = intArrayOf(36)
     val threads = ArrayList<Thread>()
-    val lock = MyReentrantLock(true)
+    val lock = MyReentranLock(true)
 
     for (i in 0..5) {
         threads.add(Thread {

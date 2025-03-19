@@ -13,7 +13,7 @@ class MyThreadPool(
     private val threadList = ArrayList<Thread>()
 
     private var atomicInt = AtomicInteger()
-    private val mainLock = MyReentrantLock()
+    private val mainLock = MyReentranLock()
 
     private var isShutdown = false
 

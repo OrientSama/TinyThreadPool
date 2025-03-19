@@ -3,7 +3,6 @@ package org.example
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.locks.ReentrantLock
 
 class MyThreadPool(
     private val corePoolSize: Int, private val maxSize: Int,
@@ -14,7 +13,7 @@ class MyThreadPool(
     private val threadList = ArrayList<Thread>()
 
     private var atomicInt = AtomicInteger()
-    private val mainLock = ReentrantLock()
+    private val mainLock = MyReentrantLock()
 
     private var isShutdown = false
 

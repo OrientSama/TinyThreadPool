@@ -11,7 +11,7 @@ class MyThreadPool(
     private val blockingQueue: ArrayBlockingQueue<Runnable>,
     private val rejectHandle: RejectHandle
 ) {
-    private val ThreadList = ArrayList<Thread>()
+    private val threadList = ArrayList<Thread>()
 
     private var atomicInt = AtomicInteger()
     private val mainLock = ReentrantLock()
@@ -30,9 +30,9 @@ class MyThreadPool(
             }
 
             // 1. 创建核心线程
-            if (ThreadList.size < corePoolSize) {
+            if (threadList.size < corePoolSize) {
                 val thread = PooledThread(task, true)
-                ThreadList.add(thread)
+                threadList.add(thread)
                 thread.start()
                 return
             }
@@ -43,11 +43,11 @@ class MyThreadPool(
             // 3. 队列满了 创建辅助线程
             var isRun = false
             // 辅助线程
-            if (ThreadList.size < maxSize) {
+            if (threadList.size < maxSize) {
 
                 // 如果还有辅助线程的额度, 则直接把该任务交给辅助线程
                 val thread = PooledThread(task, false)
-                ThreadList.add(thread)
+                threadList.add(thread)
                 thread.start()
                 isRun = true
             }
@@ -64,7 +64,7 @@ class MyThreadPool(
         mainLock.lock()
         try {
             isShutdown = true
-            ThreadList.forEach {
+            threadList.forEach {
                 it.interrupt()
             }
         } finally {
@@ -98,7 +98,7 @@ class MyThreadPool(
                     }
                     cmd.run()
                 } catch (e: InterruptedException) {
-                    println("${currentThread().name} 被中断! 当前线程池还有${ThreadList.size}个线程")
+                    println("${currentThread().name} 被中断! 当前线程池还有${threadList.size}个线程")
                     interrupt()
                     break
                 }
@@ -108,8 +108,8 @@ class MyThreadPool(
             // 退出循环后
             mainLock.lock()
             try {
-                ThreadList.remove(this)
-                println("正在将停止工作的 $name 移出...还剩 ${ThreadList.size} 个线程!")
+                threadList.remove(this)
+                println("正在将停止工作的 $name 移出...还剩 ${threadList.size} 个线程!")
                 atomicInt.getAndDecrement()
             } finally {
                 mainLock.unlock()
